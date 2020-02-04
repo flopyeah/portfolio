@@ -139,6 +139,10 @@ class User implements UserInterface
 
         return $this;
     }
+    
+    public function getPseudo(){
+        return $this->prenom.$this->nom;
+    }
 
     public function getNom(): ?string
     {
@@ -152,7 +156,19 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getCivilite(): ?int
+    public function getRenderCivilite() {
+        if ($this->civilite == 1) {
+            return 'M';
+        }
+        elseif ($this->civilite == 2) {
+            return 'Mme';
+        }
+        else {
+            return 'Mlle';
+        }
+    }
+
+    public function getCivilite()
     {
         return $this->civilite;
     }
