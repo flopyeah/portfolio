@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -49,6 +51,22 @@ class User implements UserInterface
      * @ORM\Column(type="smallint")
      */
     private $civilite;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Metier", inversedBy="users")
+     */
+    private $metier;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Projet", mappedBy="user")
+     */
+    private $projets;
+
+    public function __construct()
+    {
+        $this->metier = new ArrayCollection();
+        $this->projets = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -176,6 +194,63 @@ class User implements UserInterface
     public function setCivilite(int $civilite): self
     {
         $this->civilite = $civilite;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Metier[]
+     */
+    public function getMetier(): Collection
+    {
+        return $this->metier;
+    }
+
+    public function addMetier(Metier $metier): self
+    {
+        if (!$this->metier->contains($metier)) {
+            $this->metier[] = $metier;
+        }
+
+        return $this;
+    }
+
+    public function removeMetier(Metier $metier): self
+    {
+        if ($this->metier->contains($metier)) {
+            $this->metier->removeElement($metier);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Projet[]
+     */
+    public function getProjets(): Collection
+    {
+        return $this->projets;
+    }
+
+    public function addProjet(Projet $projet): self
+    {
+        if (!$this->projets->contains($projet)) {
+            $this->projets[] = $projet;
+            $projet->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProjet(Projet $projet): self
+    {
+        if ($this->projets->contains($projet)) {
+            $this->projets->removeElement($projet);
+            // set the owning side to null (unless already changed)
+            if ($projet->getUser() === $this) {
+                $projet->setUser(null);
+            }
+        }
 
         return $this;
     }

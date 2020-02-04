@@ -9,12 +9,26 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ user.renderCivilite }} {{ user.prenom }} {{ user.nom }} ! ✅</h1>
-                  <h2>{{ user.pseudo }}</h2>                  
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/Applications/MAMP/htdocs/symfony/portfolio2/src/Controller/UserController.php'|file_link(0) }}">src/Controller/UserController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/Applications/MAMP/htdocs/symfony/portfolio2/templates/user/index.html.twig'|file_link(0) }}">templates/user/index.html.twig</a></code></li>
-    </ul>
+    <h1>Hello {{ user.renderCivilite }} {{ user.prenom }} {{ user.nom }} </h1>
+    
+    <h4>{{ user.email }}</h4>
+
+{% if information %}
+    <p>{{ information.accroche  }}</p>
+    <p>{{ information.description  }}</p>
+    <p>{{ information.codepostal  }} {{ information.ville  }}</p>
+    <p>{{ information.site  }}</p>
+    <p>{{ information.linkedin  }}</p>
+{% endif %}
+
+{% for metier in user.metier %}
+    <p>{{ metier.nom }}</p>
+{% endfor %}
+
+{% if is_granted('IS_AUTHENTICATED_FULLY') and app.user == user %}
+    <a href="{{ path('user_edit_info') }}" class="btn btn-primary">modifier mon profil</a>
+    <a href="{{ path('user_edit_metier') }}" class="btn btn-primary">modifier mes metiers</a>
+{% endif %}
+
 </div>
 {% endblock %}

@@ -2,32 +2,28 @@
 
 namespace App\Form;
 
-use App\Entity\Information;
+use App\Entity\Projet;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class InformationType extends AbstractType
+class ProjetType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('accroche')
+            ->add('nom')
             ->add('description')
-            ->add('site')
-            ->add('linkedin')
-            ->add('adresse')
-            ->add('codepostal')
-            ->add('ville')
-            ->add('Enregistrer', SubmitType::class)
+            ->add('image')
+            ->add('lien')
+            ->add('createdAt')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Information::class,
+            'data_class' => Projet::class,
         ]);
     }
 }
